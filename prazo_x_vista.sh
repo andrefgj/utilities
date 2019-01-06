@@ -112,7 +112,7 @@ Rendimento a prazo: $RENDIMENTO_A_PRAZO
 Rendimento a vista: $SALDO_A_VISTA
 
 "
-# echo `echo "$RENDIMENTO_A_PRAZO > $SALDO_A_VISTA" | bc`
+
 if [ `echo "$RENDIMENTO_A_PRAZO > $SALDO_A_VISTA" | bc` -eq 1 ] ; then
     echo "###################################"
     echo "# Melhor opção de compra: À PRAZO #"
