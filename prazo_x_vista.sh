@@ -104,6 +104,7 @@ declare -a vista
 # Popular matrizes prazo e vista
 for (( i=1; i<=$parcelas; i++ ))
 do  
+    # Matriz prazo
     if [ $i -eq 1 ]; then
         prazo[$i,1]=`echo "scale=4;$total_a_vista - $valor_parcela" | bc`
         prazo[$i,2]=`echo "scale=4;${prazo[$i,1]} / 100 * $taxa_poupanca" | bc`
@@ -112,7 +113,7 @@ do
         prazo[$i,2]=`echo "scale=4;${prazo[$i,1]} / 100 * $taxa_poupanca" | bc`
     fi
 
-
+    # Matriz vista
     if [ $i -eq 1 ]; then
         vista[$i,1]=$desconto_a_vista
         vista[$i,2]=`echo "scale=4;${vista[$i,1]} / 100 * $taxa_poupanca" | bc`
