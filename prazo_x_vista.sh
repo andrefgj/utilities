@@ -14,7 +14,7 @@ while :; do
         -h|-\?|--help)
             #echo "$package - attempt to capture frames"
             echo " "
-            echo "uso: $programname [-h] -v total_a_vista -p total_a_prazo -x NUMERO_DE_parcelas -s selic"
+            echo "uso: $programname [-h] -v TOTAL_A_VISTA -p TOTAL_A_PRAZO -x NUMERO_DE_PARCELAS -s SELIC"
             echo " "
             echo "opções:"
             echo "-h, --help                sumário de ajuda"
