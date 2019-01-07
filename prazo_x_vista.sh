@@ -93,10 +93,13 @@ rendimento_a_vista=0
 taxa_poupanca=`calcular_indice_poupanca`
 
 # Matrizes baseada na seguinte estrutura:
+# ---------------------------------------------
 # parcelas    |   saldo   |   rendimento Mensal
+# ---------------------------------------------
 # 1           |   990.89  |   45.09
 # 2           |   941.78  |   42.85
 # #           |   ###.##  |   ##.##
+# ---------------------------------------------
 declare -a prazo
 declare -a vista
 
@@ -132,8 +135,8 @@ echo "Taxa de Rendimento Poupança: $taxa_poupanca
 Valor Total à vista: $total_a_vista
 Valor Total à prazo: $total_a_prazo
 Desconto à vista: $desconto_a_vista
-Rendimento a prazo: $rendimento_a_prazo
-Rendimento a vista: $rendimento_a_vista
+Rendimento poupança a prazo: $rendimento_a_prazo
+Rendimento poupança a vista: $rendimento_a_vista
 
 "
 
