@@ -1,8 +1,8 @@
 #!/bin/bash
 # POSIX
-######################################################################################
-# Use esse script para determinar qual a melhor opção de compra: ou à prazo ou à vista
-######################################################################################
+#####################################################################################################################################
+# Use esse script para determinar qual a melhor opção de pagamento (ou à prazo, ou à vista) considerando manter o montante em poupança
+#####################################################################################################################################
 
 die() {
     printf '%s\n' "$1" >&2
@@ -77,31 +77,54 @@ while :; do
 done
 
 
+calcularIndicePoupanca(){
+    if [ `echo "$SELIC > 8.5" | bc` -eq 1  ]; then
+        echo 0.5
+    else
+        echo `echo "scale=4;$SELIC * 0.7" | bc`
+    fi
+}
 
-DESCONTO_A_VISTA=`echo "scale=4;$TOTAL_A_PRAZO - $TOTAL_A_VISTA" | bc`
-VALOR_PARCELA=`echo "scale=4;$TOTAL_A_PRAZO / $PARCELAS" | bc`
+
+DESCONTO_A_VISTA=`echo "scale=2;$TOTAL_A_PRAZO - $TOTAL_A_VISTA" | bc`
+VALOR_PARCELA=`echo "scale=2;$TOTAL_A_PRAZO / $PARCELAS" | bc`
 RENDIMENTO_A_PRAZO=0
 RENDIMENTO_A_VISTA=0
-TAXA_POUPANCA=`echo "scale=4;$SELIC * 0.7" | bc`
-SALDO_A_PRAZO=`echo "scale=4;$TOTAL_A_PRAZO - $VALOR_PARCELA" | bc`
-SALDO_A_VISTA=$DESCONTO_A_VISTA
+TAXA_POUPANCA=`calcularIndicePoupanca`
+
+# Matriz baseada na seguinte estrutura:
+# parcelas    |   saldo   |   rendimento Mensal
+# 1           |   990.89  |   45.09
+# 2           |   941.78  |   42.85
+# #           |   ###.##  |   ##.##
+declare -a prazo
+declare -a vista
 
 
-for (( c=1; c<=$PARCELAS; c++ ))
+# Popular matrizes prazo e vista
+for (( i=1; i<=$PARCELAS; i++ ))
 do  
-    # echo "loop: "$c
+    if [ $i -eq 1 ]; then
+        prazo[$i,1]=`echo "scale=4;$TOTAL_A_VISTA - $VALOR_PARCELA" | bc`
+        prazo[$i,2]=`echo "scale=4;${prazo[$i,1]} / 100 * $TAXA_POUPANCA" | bc`
+    else
+        prazo[$i,1]=`echo "scale=4;${prazo[$(($i-1)),1]} + ${prazo[$(($i-1)),2]} - $VALOR_PARCELA" | bc`
+        prazo[$i,2]=`echo "scale=4;${prazo[$i,1]} / 100 * $TAXA_POUPANCA" | bc`
+    fi
 
-    RENDIMENTO_MENSAL_A_PRAZO=`echo "scale=4;$SALDO_A_PRAZO / 100 * $TAXA_POUPANCA" | bc`
-    RENDIMENTO_A_PRAZO=`echo "scale=4;$RENDIMENTO_A_PRAZO + $RENDIMENTO_MENSAL_A_PRAZO" | bc`
-    SALDO_A_PRAZO=`echo "scale=4;$SALDO_A_PRAZO - $VALOR_PARCELA" | bc`
 
-
-    RENDIMENTO_MENSAL_A_VISTA=`echo "scale=4;$SALDO_A_VISTA / 100 * $TAXA_POUPANCA" | bc`
-    RENDIMENTO_A_VISTA=`echo "scale=4;$RENDIMENTO_A_VISTA + $RENDIMENTO_MENSAL_A_VISTA" | bc`
-    SALDO_A_VISTA=`echo "scale=4;$SALDO_A_VISTA + $RENDIMENTO_MENSAL_A_VISTA" | bc`
+    if [ $i -eq 1 ]; then
+        vista[$i,1]=$DESCONTO_A_VISTA
+        vista[$i,2]=`echo "scale=4;${vista[$i,1]} / 100 * $TAXA_POUPANCA" | bc`
+    else
+        vista[$i,1]=`echo "scale=4;${vista[$(($i-1)),1]} + ${vista[$(($i-1)),2]}" | bc`
+        vista[$i,2]=`echo "scale=4;${vista[$i,1]} / 100 * $TAXA_POUPANCA" | bc`
+    fi
 done
 
 
+RENDIMENTO_A_PRAZO=`echo "scale=4;${prazo[$PARCELAS,1]} + ${prazo[$PARCELAS,2]}" | bc`
+RENDIMENTO_A_VISTA=`echo "scale=4;${vista[$PARCELAS,1]} + ${vista[$PARCELAS,2]}" | bc`
 
 
 echo "Taxa de Rendimento Poupança: $TAXA_POUPANCA
@@ -109,17 +132,21 @@ Valor Total à vista: $TOTAL_A_VISTA
 Valor Total à prazo: $TOTAL_A_PRAZO
 Desconto à vista: $DESCONTO_A_VISTA
 Rendimento a prazo: $RENDIMENTO_A_PRAZO
-Rendimento a vista: $SALDO_A_VISTA
+Rendimento a vista: $RENDIMENTO_A_VISTA
 
 "
 
-if [ `echo "$RENDIMENTO_A_PRAZO > $SALDO_A_VISTA" | bc` -eq 1 ] ; then
-    echo "###################################"
-    echo "# Melhor opção de compra: À PRAZO #"
-    echo "###################################"
+if [ `echo "$RENDIMENTO_A_PRAZO > $RENDIMENTO_A_VISTA" | bc` -eq 1 ]; then
+    echo "######################################"
+    echo "# A melhor opção de pagamento é À PRAZO #"
+    echo "######################################
+       
+    "
 else
-    echo "###################################"
-    echo "# Melhor opção de compra: À VISTA #"
-    echo "###################################"
+    echo "#########################################"
+    echo "# A melhor opção de pagamento é À VISTA #"
+    echo "#########################################
+       
+    "
 fi
 
