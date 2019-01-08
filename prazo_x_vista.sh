@@ -94,10 +94,11 @@ taxa_poupanca=`calcular_indice_poupanca`
 
 # Matrizes baseada na seguinte estrutura:
 # ---------------------------------------------
-# parcelas    |   saldo   |   rendimento Mensal
+# período     |   saldo   |   rendimento Mensal
 # ---------------------------------------------
-# 1           |   990.89  |   45.09
-# 2           |   941.78  |   42.85
+# 1           |   1109.78 |   0.00
+# 2           |   937.72  |   42.67
+# 3           |   871.58  |   39.66
 # #           |   ###.##  |   ##.##
 # ---------------------------------------------
 declare -a prazo
@@ -105,17 +106,20 @@ declare -a vista
 
 
 # Popular matrizes prazo e vista
-for (( i=1; i<=$parcelas; i++ ))
+for (( i=2; i<=$parcelas; i++ ))
 do  
     # Matriz prazo
-    if [ $i -eq 1 ]; then
+    if [ $i -eq 2 ]; then
         prazo[$i,1]=`echo "scale=4;$total_a_vista - $valor_parcela" | bc`
         prazo[$i,2]=`echo "scale=4;${prazo[$i,1]} / 100 * $taxa_poupanca" | bc`
     else
         prazo[$i,1]=`echo "scale=4;${prazo[$(($i-1)),1]} + ${prazo[$(($i-1)),2]} - $valor_parcela" | bc`
         prazo[$i,2]=`echo "scale=4;${prazo[$i,1]} / 100 * $taxa_poupanca" | bc`
     fi
+done
 
+for (( i=1; i<=$parcelas; i++ ))
+do
     # Matriz vista
     if [ $i -eq 1 ]; then
         vista[$i,1]=$desconto_a_vista
