@@ -58,6 +58,25 @@ print('Rendimento poupança a prazo: ' + str(format(rendimento_a_prazo, '.2f')))
 print('Rendimento poupança a vista: ' + str(format(rendimento_a_vista, '.2f')))
 print('\n')
 
+
+
+print('Prospecção de Pagamento à Prazo')
+print('-------------------------------')
+print('Parcela N. \t Saldo \t Rendimento Mensal')
+print('1 \t\t' + str(format(total_a_vista)) + '\t\t' + str(format(0, '.2f')))
+for i in range(len(prazo)):
+    print(str(i + 2) + '\t\t' + str(format(prazo[i][0], '.2f')) + '\t\t' + str(format(prazo[i][1], '.2f')))
+
+print('\n')
+print('Prospecção de Pagamento à Vista')
+print('-------------------------------')
+print('Parcela N. \t Saldo \t Rendimento Mensal')
+# print('1 \t\t' + str(format(total_a_vista)) + '\t\t' + str(format(0, '.2f')))
+for i in range(len(vista)):
+    print(str(i + 1) + '\t\t' + str(format(vista[i][0], '.2f')) + '\t\t' + str(format(vista[i][1], '.2f')))
+
+print('\n')
+
 if rendimento_a_prazo > rendimento_a_vista:
     print('#########################################')
     print('# A melhor opção de pagamento é À PRAZO #')
