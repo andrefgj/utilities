@@ -2,12 +2,12 @@
 import argparse
 
 
-parser = argparse.ArgumentParser(description='Identificar qual a melhor opção de pagamento (à prazo ou à vista)')
+parser = argparse.ArgumentParser(prog='prazo_x_vista', description='Identificar qual a melhor opção de pagamento (à prazo ou à vista)', formatter_class=lambda prog: argparse.HelpFormatter(prog, max_help_position=50))
 parser.add_argument('-v', '--total_a_vista', dest='total_a_vista', type=float, help='valor total à vista')
 parser.add_argument('-p', '--total_a_prazo', dest='total_a_prazo', type=float, help='valor total à prazo')
-parser.add_argument('-x', '--parcelas', dest='parcelas', type=int, help='número de parcelas')
-parser.add_argument('-s', '--selic', dest='selic', type=float, help='taxa selic')
-parser.add_argument('-d', '--detailed', nargs='?', dest='detailed', type=bool, help='sumário detalhado')
+parser.add_argument('-x', '--parcelas',      dest='parcelas',      type=int,   help='número de parcelas')
+parser.add_argument('-s', '--selic',         dest='selic',         type=float, help='taxa selic')
+parser.add_argument('-d', '--detailed',      dest='detailed',      help='sumário detalhado', action='store_true' )
 args = parser.parse_args()
 
 
