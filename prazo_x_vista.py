@@ -1,12 +1,24 @@
-import array
+#import array
+import argparse
+
+
+parser = argparse.ArgumentParser(description='Identificar qual a melhor opção de pagamento (à prazo ou à vista)')
+parser.add_argument('-v', '--total_a_vista', dest='total_a_vista', type=float, help='valor total à vista')
+parser.add_argument('-p', '--total_a_prazo', dest='total_a_prazo', type=float, help='valor total à prazo')
+parser.add_argument('-x', '--parcelas', dest='parcelas', type=int, help='número de parcelas')
+parser.add_argument('-s', '--selic', dest='selic', type=float, help='taxa selic')
+parser.add_argument('-d', '--detailed', nargs='?', dest='detailed', type=bool, help='sumário detalhado')
+args = parser.parse_args()
+
+
+
 
 # Flags
-help = False
-parcelas = 12
-selic = 6.5
-total_a_prazo = 1305.63
-total_a_vista = 1109.78
-detailed = False
+parcelas = args.parcelas
+selic = args.selic
+total_a_prazo = args.total_a_prazo
+total_a_vista = args.total_a_vista
+detailed = args.detailed
 
 
 
@@ -21,7 +33,6 @@ vista = []
 
 
 def calcular_indice_poupanca(selic):
-    taxa_poupanca = 0
     if selic > 8.5:
         return 0.5
     else:
@@ -52,7 +63,7 @@ for i in range(parcelas):
 
 
 rendimento_a_prazo = prazo[parcelas - 2][0] + prazo[parcelas - 2][1]
-rendimento_a_vista = vista[parcelas -1][0] + vista[parcelas - 1][1]
+rendimento_a_vista = vista[parcelas - 1][0] + vista[parcelas - 1][1]
 
 # Exibir sumário
 print('Taxa de Rendimento poupança: ' + str(taxa_poupanca))
@@ -63,6 +74,7 @@ print('Rendimento poupança a prazo: ' + str(format(rendimento_a_prazo, '.2f')))
 print('Rendimento poupança a vista: ' + str(format(rendimento_a_vista, '.2f')))
 print('\n')
 
+# Exibir sumário detalhado?
 if detailed == True:
     print('Prospecção de Pagamento à Prazo')
     print('-------------------------------')
