@@ -76,7 +76,7 @@ print('\n')
 
 # Exibir sumário detalhado?
 if detailed == True:
-    print('Prospecção de Pagamento à Prazo')
+    print('Prospecção com Pagamento à Prazo')
     print('-------------------------------')
     print('Parcela N. \t Saldo \t Rendimento Mensal')
     print('1 \t\t' + str(format(total_a_vista)) + '\t\t' + str(format(0, '.2f')))
@@ -84,7 +84,7 @@ if detailed == True:
         print(str(i + 2) + '\t\t' + str(format(prazo[i][0], '.2f')) + '\t\t' + str(format(prazo[i][1], '.2f')))
 
     print('\n')
-    print('Prospecção de Pagamento à Vista')
+    print('Prospecção com Pagamento à Vista')
     print('-------------------------------')
     print('Parcela N. \t Saldo \t Rendimento Mensal')
     # print('1 \t\t' + str(format(total_a_vista)) + '\t\t' + str(format(0, '.2f')))
