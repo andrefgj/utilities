@@ -1,4 +1,3 @@
-#import array
 import argparse
 
 
@@ -87,18 +86,16 @@ if detailed == True:
     print('Prospecção com Pagamento à Vista')
     print('-------------------------------')
     print('Parcela N. \t Saldo \t Rendimento Mensal')
-    # print('1 \t\t' + str(format(total_a_vista)) + '\t\t' + str(format(0, '.2f')))
     for i in range(len(vista)):
         print(str(i + 1) + '\t\t' + str(format(vista[i][0], '.2f')) + '\t\t' + str(format(vista[i][1], '.2f')))
     print('\n')
 
 if rendimento_a_prazo > rendimento_a_vista:
-    print('#########################################')
-    print('# A melhor opção de pagamento é À PRAZO #')
-    print('#########################################')
-    print('\n')
+    melhor_opcao = 'À PRAZO'
 else:
-    print('#########################################')
-    print('# A melhor opção de pagamento é À VISTA #')
-    print('#########################################')
-    print('\n')
+    melhor_opcao = 'À VISTA'
+
+print('#########################################')
+print('# A melhor opção de pagamento é ' + melhor_opcao + ' #')
+print('#########################################')
+print('\n')
